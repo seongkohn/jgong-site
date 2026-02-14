@@ -69,6 +69,8 @@ img { max-width: 100%; height: auto; display: block; }
 .nav-logo img {
   height: 100%;
   width: auto;
+  filter: invert(1);
+  mix-blend-mode: screen;
 }
 
 .nav-toggle {
