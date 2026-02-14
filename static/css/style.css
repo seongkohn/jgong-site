@@ -414,7 +414,8 @@ img { max-width: 100%; height: auto; display: block; }
 .work-video {
   margin-top: 1.25rem;
   position: relative;
-  padding-bottom: 56.25%;
+  padding-bottom: min(56.25%, 360px);
+  max-width: 640px;
   height: 0;
 }
 
