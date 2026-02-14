@@ -103,7 +103,10 @@ def _migrate(db):
     # Add title column to work_video if missing
     wv_cols = [r[1] for r in db.execute("PRAGMA table_info(work_video)").fetchall()]
     if "title" not in wv_cols:
-        db.execute("ALTER TABLE work_video ADD COLUMN title TEXT")
+        try:
+            db.execute("ALTER TABLE work_video ADD COLUMN title TEXT")
+        except Exception:
+            pass
 
     db.commit()
 
