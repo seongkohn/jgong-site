@@ -30,8 +30,16 @@
       <textarea id="description" name="description" rows="4">{{ work.description if work and work.description else '' }}</textarea>
     </div>
     <div class="form-group">
-      <label for="video_url">Video Embed URL</label>
-      <input type="url" id="video_url" name="video_url" value="{{ work.video_url if work and work.video_url else '' }}" placeholder="https://www.youtube.com/embed/...">
+      <label>Video Embed URLs</label>
+      <div id="video-urls-container">
+        {% for v in videos %}
+        <div class="video-url-row">
+          <input type="url" name="video_urls[]" value="{{ v.video_url }}" placeholder="https://www.youtube.com/embed/...">
+          <button type="button" class="btn btn-secondary btn-remove-video">Remove</button>
+        </div>
+        {% endfor %}
+      </div>
+      <button type="button" id="add-video-btn" class="btn btn-secondary">+ Add video</button>
     </div>
     <div class="form-group">
       <label for="image">Image (optional)</label>

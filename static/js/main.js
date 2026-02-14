@@ -8,6 +8,25 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  // Work form: add/remove video URL inputs
+  var addVideoBtn = document.getElementById("add-video-btn");
+  var videoContainer = document.getElementById("video-urls-container");
+  if (addVideoBtn && videoContainer) {
+    addVideoBtn.addEventListener("click", function () {
+      var row = document.createElement("div");
+      row.className = "video-url-row";
+      row.innerHTML =
+        '<input type="url" name="video_urls[]" placeholder="https://www.youtube.com/embed/...">' +
+        '<button type="button" class="btn btn-secondary btn-remove-video">Remove</button>';
+      videoContainer.appendChild(row);
+    });
+    videoContainer.addEventListener("click", function (e) {
+      if (e.target.classList.contains("btn-remove-video")) {
+        e.target.parentElement.remove();
+      }
+    });
+  }
+
   // Gallery arrow scroll
   var wrapper = document.querySelector(".gallery-track-wrapper");
   if (!wrapper) return;

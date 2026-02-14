@@ -145,23 +145,31 @@ def work_new():
         db = get_db()
         max_order = db.execute("SELECT COALESCE(MAX(sort_order),0) FROM work").fetchone()[0]
         db.execute(
-            "INSERT INTO work (title, year, duration, description, performers, video_url, image_filename, sort_order) "
-            "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO work (title, year, duration, description, performers, image_filename, sort_order) "
+            "VALUES (?, ?, ?, ?, ?, ?, ?)",
             (
                 request.form["title"],
                 request.form.get("year") or None,
                 request.form.get("duration") or None,
                 request.form.get("description") or None,
                 request.form.get("performers") or None,
-                request.form.get("video_url") or None,
                 img,
                 max_order + 1,
             ),
         )
+        work_id = db.execute("SELECT last_insert_rowid()").fetchone()[0]
+        video_urls = request.form.getlist("video_urls[]")
+        for i, url in enumerate(video_urls):
+            url = url.strip()
+            if url:
+                db.execute(
+                    "INSERT INTO work_video (work_id, video_url, sort_order) VALUES (?, ?, ?)",
+                    (work_id, url, i),
+                )
         db.commit()
         flash("Work added.", "success")
         return redirect(url_for("admin_bp.dashboard"))
-    return render_template("admin/work_form.html", work=None)
+    return render_template("admin/work_form.html", work=None, videos=[])
 
 
 @admin_bp.route("/works/<int:work_id>/edit", methods=["GET", "POST"])
@@ -184,7 +192,7 @@ def work_edit(work_id):
             img = None
 
         db.execute(
-            "UPDATE work SET title=?, year=?, duration=?, description=?, performers=?, video_url=?, image_filename=? "
+            "UPDATE work SET title=?, year=?, duration=?, description=?, performers=?, image_filename=? "
             "WHERE id=?",
             (
                 request.form["title"],
@@ -192,15 +200,26 @@ def work_edit(work_id):
                 request.form.get("duration") or None,
                 request.form.get("description") or None,
                 request.form.get("performers") or None,
-                request.form.get("video_url") or None,
                 img,
                 work_id,
             ),
         )
+        db.execute("DELETE FROM work_video WHERE work_id = ?", (work_id,))
+        video_urls = request.form.getlist("video_urls[]")
+        for i, url in enumerate(video_urls):
+            url = url.strip()
+            if url:
+                db.execute(
+                    "INSERT INTO work_video (work_id, video_url, sort_order) VALUES (?, ?, ?)",
+                    (work_id, url, i),
+                )
         db.commit()
         flash("Work updated.", "success")
         return redirect(url_for("admin_bp.dashboard"))
-    return render_template("admin/work_form.html", work=work)
+    videos = db.execute(
+        "SELECT * FROM work_video WHERE work_id = ? ORDER BY sort_order", (work_id,)
+    ).fetchall()
+    return render_template("admin/work_form.html", work=work, videos=videos)
 
 
 @admin_bp.route("/works/<int:work_id>/delete", methods=["POST"])

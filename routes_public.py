@@ -25,8 +25,17 @@ def bio():
 
 @public_bp.route("/works")
 def works():
-    rows = get_db().execute("SELECT * FROM work ORDER BY sort_order, year DESC").fetchall()
-    return render_template("public/works.html", works=rows)
+    db = get_db()
+    rows = db.execute("SELECT * FROM work ORDER BY sort_order, year DESC").fetchall()
+    works = []
+    for row in rows:
+        w = dict(row)
+        w["videos"] = db.execute(
+            "SELECT video_url FROM work_video WHERE work_id = ? ORDER BY sort_order",
+            (row["id"],),
+        ).fetchall()
+        works.append(w)
+    return render_template("public/works.html", works=works)
 
 
 @public_bp.route("/events")
