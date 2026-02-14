@@ -355,27 +355,49 @@ img { max-width: 100%; height: auto; display: block; }
   margin-bottom: .2rem;
 }
 
-.work-desc-toggle {
+.work-desc-wrapper {
   margin-top: .75rem;
+  position: relative;
 }
 
-.work-desc-toggle summary {
-  cursor: pointer;
-  font-family: var(--font-sans);
-  font-size: .85rem;
-  color: var(--text-muted);
-  user-select: none;
-}
-
-.work-desc-toggle summary:hover {
-  color: var(--text-color);
+.work-desc-toggle {
+  display: none;
 }
 
 .work-desc {
-  margin-top: .5rem;
   color: var(--text-muted);
   font-size: .95rem;
   line-height: 1.75;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.work-desc-toggle:checked ~ .work-desc {
+  -webkit-line-clamp: unset;
+  overflow: visible;
+}
+
+.work-desc-more {
+  cursor: pointer;
+  display: inline-block;
+  margin-top: .35rem;
+  font-family: var(--font-sans);
+  font-size: .82rem;
+  color: var(--text-muted);
+}
+
+.work-desc-more:hover {
+  color: var(--text-color);
+}
+
+.work-desc-more::after {
+  content: 'Read more';
+}
+
+.work-desc-toggle:checked ~ .work-desc-more::after {
+  content: 'Read less';
 }
 
 .work-video-title {
