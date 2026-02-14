@@ -1,0 +1,205 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<section class="section">
+  <div class="admin-header">
+    <h1 class="page-title">Dashboard</h1>
+    <a href="{{ url_for('admin_bp.logout') }}" class="btn btn-sm">Log Out</a>
+  </div>
+
+  <!-- Works -->
+  <div class="admin-section">
+    <div class="admin-section-header">
+      <h2>Works</h2>
+      <a href="{{ url_for('admin_bp.work_new') }}" class="btn btn-sm">+ Add Work</a>
+    </div>
+    {% if works %}
+    <table class="admin-table">
+      <thead>
+        <tr><th>Order</th><th>Title</th><th>Year</th><th>Duration</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for w in works %}
+        <tr>
+          <td class="reorder-cell">
+            <form method="POST" action="{{ url_for('admin_bp.work_move', work_id=w.id, direction='up') }}" class="inline-form">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="reorder-btn" {% if loop.first %}disabled{% endif %} title="Move up">&uarr;</button>
+            </form>
+            <form method="POST" action="{{ url_for('admin_bp.work_move', work_id=w.id, direction='down') }}" class="inline-form">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="reorder-btn" {% if loop.last %}disabled{% endif %} title="Move down">&darr;</button>
+            </form>
+          </td>
+          <td>{{ w.title }}</td>
+          <td>{{ w.year or "—" }}</td>
+          <td>{{ w.duration or "—" }}</td>
+          <td class="admin-actions">
+            <a href="{{ url_for('admin_bp.work_edit', work_id=w.id) }}" class="btn btn-sm">Edit</a>
+            <form method="POST" action="{{ url_for('admin_bp.work_delete', work_id=w.id) }}" class="inline-form" onsubmit="return confirm('Delete this work?')">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state">No works yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- Events -->
+  <div class="admin-section">
+    <div class="admin-section-header">
+      <h2>Events</h2>
+      <a href="{{ url_for('admin_bp.event_new') }}" class="btn btn-sm">+ Add Event</a>
+    </div>
+    {% if events %}
+    <table class="admin-table">
+      <thead>
+        <tr><th>Order</th><th>Title</th><th>Date</th><th>Location</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for e in events %}
+        <tr>
+          <td class="reorder-cell">
+            <form method="POST" action="{{ url_for('admin_bp.event_move', event_id=e.id, direction='up') }}" class="inline-form">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="reorder-btn" {% if loop.first %}disabled{% endif %} title="Move up">&uarr;</button>
+            </form>
+            <form method="POST" action="{{ url_for('admin_bp.event_move', event_id=e.id, direction='down') }}" class="inline-form">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="reorder-btn" {% if loop.last %}disabled{% endif %} title="Move down">&darr;</button>
+            </form>
+          </td>
+          <td>{{ e.title }}</td>
+          <td>{{ e.date or "—" }}</td>
+          <td>{{ e.location or "—" }}</td>
+          <td class="admin-actions">
+            <a href="{{ url_for('admin_bp.event_edit', event_id=e.id) }}" class="btn btn-sm">Edit</a>
+            <form method="POST" action="{{ url_for('admin_bp.event_delete', event_id=e.id) }}" class="inline-form" onsubmit="return confirm('Delete this event?')">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state">No events yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- Gallery -->
+  <div class="admin-section">
+    <div class="admin-section-header">
+      <h2>Gallery</h2>
+    </div>
+    <form method="POST" action="{{ url_for('admin_bp.gallery_add') }}" enctype="multipart/form-data" class="gallery-upload-form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="gallery-upload-row">
+        <input type="file" name="image" accept="image/*" required>
+        <input type="text" name="caption" placeholder="Caption (optional)">
+        <button type="submit" class="btn btn-sm">+ Add Photo</button>
+      </div>
+    </form>
+    {% if gallery %}
+    <div class="admin-gallery-grid">
+      {% for p in gallery %}
+      <div class="admin-gallery-item">
+        <img src="{{ url_for('static', filename='images/uploads/' + p.image_filename) }}" alt="{{ p.caption or '' }}">
+        <div class="admin-gallery-actions">
+          <form method="POST" action="{{ url_for('admin_bp.gallery_move', photo_id=p.id, direction='up') }}" class="inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="reorder-btn" {% if loop.first %}disabled{% endif %} title="Move left">&larr;</button>
+          </form>
+          <form method="POST" action="{{ url_for('admin_bp.gallery_move', photo_id=p.id, direction='down') }}" class="inline-form">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="reorder-btn" {% if loop.last %}disabled{% endif %} title="Move right">&rarr;</button>
+          </form>
+          <form method="POST" action="{{ url_for('admin_bp.gallery_delete', photo_id=p.id) }}" class="inline-form" onsubmit="return confirm('Delete this photo?')">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-sm btn-danger">&times;</button>
+          </form>
+        </div>
+        {% if p.caption %}<div class="admin-gallery-caption">{{ p.caption }}</div>{% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="empty-state">No gallery photos yet. Placeholders will show on the front page.</p>
+    {% endif %}
+  </div>
+
+  <!-- Messages -->
+  <div class="admin-section">
+    <div class="admin-section-header">
+      <h2>Messages{% if unread %} <span class="badge">{{ unread }}</span>{% endif %}</h2>
+    </div>
+    {% if messages %}
+    <table class="admin-table">
+      <thead>
+        <tr><th>From</th><th>Email</th><th>Date</th><th>Preview</th><th></th></tr>
+      </thead>
+      <tbody>
+        {% for m in messages %}
+        <tr class="{% if not m.is_read %}msg-unread{% endif %}">
+          <td>{{ m.name }}</td>
+          <td>{{ m.email }}</td>
+          <td>{{ m.created_at[:16] }}</td>
+          <td class="msg-preview">{{ m.body[:60] }}{% if m.body|length > 60 %}...{% endif %}</td>
+          <td class="admin-actions">
+            <a href="{{ url_for('admin_bp.message_view', msg_id=m.id) }}" class="btn btn-sm">View</a>
+            <form method="POST" action="{{ url_for('admin_bp.message_delete', msg_id=m.id) }}" class="inline-form" onsubmit="return confirm('Delete this message?')">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state">No messages yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- Settings -->
+  <div class="admin-section">
+    <div class="admin-section-header">
+      <h2>Settings</h2>
+    </div>
+    <form method="POST" action="{{ url_for('admin_bp.settings_update') }}" class="form">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+      <div class="form-group">
+        <label for="recipient_email">Recipient email (where messages are sent)</label>
+        <input type="email" id="recipient_email" name="recipient_email" value="{{ settings.recipient_email }}">
+      </div>
+      <h3 class="settings-subheading">SMTP Email Server</h3>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="mail_server">SMTP server</label>
+          <input type="text" id="mail_server" name="mail_server" value="{{ settings.mail_server }}" placeholder="smtp.gmail.com">
+        </div>
+        <div class="form-group">
+          <label for="mail_port">Port</label>
+          <input type="number" id="mail_port" name="mail_port" value="{{ settings.mail_port }}" placeholder="587">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="mail_username">SMTP username (email)</label>
+        <input type="email" id="mail_username" name="mail_username" value="{{ settings.mail_username }}" placeholder="youremail@gmail.com">
+      </div>
+      <div class="form-group">
+        <label for="mail_password">SMTP password (app password)</label>
+        <input type="password" id="mail_password" name="mail_password" value="{{ settings.mail_password }}" placeholder="xxxx xxxx xxxx xxxx">
+      </div>
+      <button type="submit" class="btn btn-sm">Save Settings</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

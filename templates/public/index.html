@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Jingmian Gong — Composer{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-name">Jingmian Gong</h1>
+    <p class="hero-tagline">Contemporary Music Composer</p>
+    <div class="hero-divider"></div>
+  </div>
+</section>
+
+<section class="gallery-section">
+  <button class="gallery-arrow gallery-prev" aria-label="Scroll left">&lsaquo;</button>
+  <div class="gallery-track-wrapper">
+    <div class="gallery-track">
+      {% if gallery %}
+        {% for photo in gallery %}
+        <div class="gallery-item">
+          <img src="{{ url_for('static', filename='images/uploads/' + photo.image_filename) }}" alt="{{ photo.caption or 'Gallery photo' }}">
+          {% if photo.caption %}<div class="gallery-caption">{{ photo.caption }}</div>{% endif %}
+        </div>
+        {% endfor %}
+        {% for photo in gallery %}
+        <div class="gallery-item">
+          <img src="{{ url_for('static', filename='images/uploads/' + photo.image_filename) }}" alt="{{ photo.caption or 'Gallery photo' }}">
+        </div>
+        {% endfor %}
+      {% else %}
+        {% for i in range(6) %}
+        <div class="gallery-item">
+          <img src="{{ url_for('static', filename='images/placeholder' ~ ((i % 3) + 1) ~ '.svg') }}" alt="Placeholder">
+        </div>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+  <button class="gallery-arrow gallery-next" aria-label="Scroll right">&rsaquo;</button>
+</section>
+
+{% if events %}
+<section class="section">
+  <h2 class="section-title">Upcoming Events</h2>
+  <div class="event-list">
+    {% for e in events %}
+    <div class="event-card">
+      <div class="event-date">{{ e.date or "" }}</div>
+      <h3>{{ e.title }}</h3>
+      {% if e.location %}<p class="event-location">{{ e.location }}</p>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  <a href="{{ url_for('public_bp.events') }}" class="link-more">View all events &rarr;</a>
+</section>
+{% endif %}
+{% endblock %}

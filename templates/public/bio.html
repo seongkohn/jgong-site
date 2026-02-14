@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Bio — Jingmian Gong{% endblock %}
+
+{% block content %}
+<section class="section">
+  <h1 class="page-title">Biography</h1>
+  <div class="bio-layout">
+    <div class="bio-portrait">
+      <img src="{{ url_for('static', filename='images/portrait.jpg') }}" alt="Jingmian Gong">
+    </div>
+    <div class="bio-content">
+      <p>
+        Jingmian Gong is a composer whose music has been performed by ensembles including
+        Ensemble Dal Niente, the Lydian String Quartet, Lamnth, Hub New Music, and Collage
+        New Music, which premiered her commissioned work during her 2024–25 fellowship with
+        the ensemble. Her recent commissions include works for the Lingnan Normal University
+        Choir as well as Boston-based new music performers and ensembles.
+      </p>
+      <p>
+        Gong is an Assistant Professor at Berklee College of Music. She also serves on the
+        faculty of Walnut Hill School for the Arts and as an Instructor at Brandeis University.
+        She previously studied composition at the Boston Conservatory at Berklee (BM) and
+        Brandeis University (MFA), where she is completing her PhD in Music Composition and
+        Theory.
+      </p>
+    </div>
+  </div>
+</section>
+{% endblock %}

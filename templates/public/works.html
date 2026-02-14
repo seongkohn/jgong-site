@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Works — Jingmian Gong{% endblock %}
+
+{% block content %}
+<section class="section">
+  <h1 class="page-title">Works</h1>
+
+  {% if works %}
+  <div class="works-list">
+    {% for w in works %}
+    <article class="work-card">
+      {% if w.image_filename %}
+      <div class="work-image">
+        <img src="{{ url_for('static', filename='images/uploads/' + w.image_filename) }}" alt="{{ w.title }}" loading="lazy">
+      </div>
+      {% endif %}
+      <div class="work-info">
+        <h2>{{ w.title }}{% if w.year %} <span class="work-year">({{ w.year }})</span>{% endif %}</h2>
+        {% if w.duration %}<p class="work-meta">Duration: {{ w.duration }}</p>{% endif %}
+        {% if w.performers %}<p class="work-meta">Performers: {{ w.performers }}</p>{% endif %}
+        {% if w.description %}<p class="work-desc">{{ w.description }}</p>{% endif %}
+        {% if w.video_url %}
+        <div class="work-video">
+          <iframe src="{{ w.video_url }}" frameborder="0" allowfullscreen loading="lazy"></iframe>
+        </div>
+        {% endif %}
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="empty-state">Works coming soon.</p>
+  {% endif %}
+</section>
+{% endblock %}
