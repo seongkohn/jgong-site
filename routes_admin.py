@@ -5,11 +5,13 @@ from flask import (
 )
 from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
+from PIL import Image
 from db import get_db, get_setting, set_setting
 from models import Admin
 
 admin_bp = Blueprint("admin_bp", __name__)
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif", "webp"}
+MAX_DIMENSION = 1920  # px – longest side
 
 
 def _allowed(filename):
@@ -20,7 +22,19 @@ def _save_image(file):
     if file and file.filename and _allowed(file.filename):
         ext = file.filename.rsplit(".", 1)[1].lower()
         name = f"{uuid.uuid4().hex}.{ext}"
-        file.save(os.path.join(current_app.config["UPLOAD_FOLDER"], name))
+        path = os.path.join(current_app.config["UPLOAD_FOLDER"], name)
+        img = Image.open(file)
+        img.exif_transpose(inplace=True) if hasattr(img, "exif_transpose") else None
+        if max(img.size) > MAX_DIMENSION:
+            img.thumbnail((MAX_DIMENSION, MAX_DIMENSION), Image.LANCZOS)
+        save_kwargs = {}
+        if ext in ("jpg", "jpeg"):
+            save_kwargs = {"quality": 85, "optimize": True}
+        elif ext == "webp":
+            save_kwargs = {"quality": 85}
+        elif ext == "png":
+            save_kwargs = {"optimize": True}
+        img.save(path, **save_kwargs)
         return name
     return None
 
