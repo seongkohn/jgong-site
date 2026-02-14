@@ -28,8 +28,11 @@ def create_app():
         init_db()
 
     @app.context_processor
-    def inject_now():
-        return {"now": datetime.utcnow}
+    def inject_globals():
+        return {
+            "now": datetime.utcnow,
+            "turnstile_site_key": app.config["TURNSTILE_SITE_KEY"],
+        }
 
     from routes_public import public_bp
     from routes_admin import admin_bp

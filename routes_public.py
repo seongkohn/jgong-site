@@ -2,6 +2,7 @@ import smtplib
 from email.message import EmailMessage
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from db import get_db, get_setting
+from turnstile import verify_turnstile
 
 public_bp = Blueprint("public_bp", __name__)
 
@@ -47,6 +48,10 @@ def events():
 @public_bp.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
+        if not verify_turnstile():
+            flash("Verification failed. Please try again.", "error")
+            return redirect(url_for("public_bp.contact"))
+
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip()
         body = request.form.get("message", "").strip()

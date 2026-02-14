@@ -10,6 +10,7 @@ from werkzeug.utils import secure_filename
 from PIL import Image
 from db import get_db, get_setting, set_setting
 from models import Admin
+from turnstile import verify_turnstile
 
 admin_bp = Blueprint("admin_bp", __name__)
 ALLOWED_EXT = {"png", "jpg", "jpeg", "gif", "webp"}
@@ -85,6 +86,9 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for("admin_bp.dashboard"))
     if request.method == "POST":
+        if not verify_turnstile():
+            flash("Verification failed. Please try again.", "error")
+            return render_template("admin/login.html")
         user = Admin.get_by_username(request.form.get("username", ""))
         if user and user.check_password(request.form.get("password", "")):
             remember = bool(request.form.get("remember"))
