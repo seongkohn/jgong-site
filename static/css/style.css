@@ -61,11 +61,14 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .nav-logo {
-  font-family: 'Dancing Script', cursive;
-  font-size: 1.5rem;
-  letter-spacing: .02em;
-  color: #fff;
-  font-weight: 500;
+  display: flex;
+  align-items: center;
+  height: 40px;
+}
+
+.nav-logo img {
+  height: 100%;
+  width: auto;
 }
 
 .nav-toggle {

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 60">
+  <!-- Jingmian Gong signature-style logo -->
+  <!-- J -->
+  <path d="M 25 18 L 32 18 L 32 38 Q 32 45 26 45 Q 20 45 20 40" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- i (dot) -->
+  <circle cx="43" cy="12" r="1.2" fill="#ffffff"/>
+  <!-- i (stem) -->
+  <path d="M 43 16 L 43 42" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+  <!-- n -->
+  <path d="M 55 42 L 55 24 Q 55 16 62 16 Q 68 16 68 22 L 68 42" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- g -->
+  <path d="M 80 42 L 80 24 Q 80 16 87 16 Q 93 16 93 22 L 93 42 L 93 48 Q 93 54 86 54 Q 80 54 80 50" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- m -->
+  <path d="M 105 42 L 105 24 Q 105 16 111 16 Q 116 16 118 20 M 118 20 L 118 42 M 118 20 Q 118 16 124 16 Q 130 16 130 22 L 130 42" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- i (dot) -->
+  <circle cx="142" cy="12" r="1.2" fill="#ffffff"/>
+  <!-- i (stem) -->
+  <path d="M 142 16 L 142 42" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+
+  <!-- a -->
+  <path d="M 165 42 L 165 28 Q 165 16 157 16 Q 151 16 151 22 Q 151 28 157 28 L 165 28 L 165 28 Q 165 16 159 16" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- n -->
+  <path d="M 177 42 L 177 24 Q 177 16 184 16 Q 190 16 190 22 L 190 42" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- space -->
+
+  <!-- G -->
+  <path d="M 220 20 Q 220 16 228 16 Q 236 16 236 24 L 236 40 Q 236 45 228 45 Q 220 45 220 40 L 220 32 L 230 32" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- o -->
+  <path d="M 252 16 Q 260 16 260 28 Q 260 42 252 42 Q 244 42 244 28 Q 244 16 252 16" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- n -->
+  <path d="M 274 42 L 274 24 Q 274 16 281 16 Q 287 16 287 22 L 287 42" stroke="#ffffff" stroke-width="1.8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
