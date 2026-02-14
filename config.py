@@ -23,8 +23,8 @@ class Config:
     MAX_CONTENT_LENGTH = 4 * 1024 * 1024  # 4 MB max upload
 
     # Cloudflare Turnstile
-    TURNSTILE_SITE_KEY = os.environ.get("TURNSTILE_SITE_KEY", "0x4AAAAAACcmRED-ctEXXMpk")
-    TURNSTILE_SECRET_KEY = os.environ.get("TURNSTILE_SECRET_KEY", "0x4AAAAAACcmRBOWo71-slF2mJbq6BtLBLQ")
+    TURNSTILE_SITE_KEY = os.environ.get("TURNSTILE_SITE_KEY", "")
+    TURNSTILE_SECRET_KEY = os.environ.get("TURNSTILE_SECRET_KEY", "")
 
     # Session / cookie security
     SESSION_COOKIE_HTTPONLY = True
