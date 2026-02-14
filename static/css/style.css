@@ -355,8 +355,24 @@ img { max-width: 100%; height: auto; display: block; }
   margin-bottom: .2rem;
 }
 
-.work-desc {
+.work-desc-toggle {
   margin-top: .75rem;
+}
+
+.work-desc-toggle summary {
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: .85rem;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.work-desc-toggle summary:hover {
+  color: var(--text-color);
+}
+
+.work-desc {
+  margin-top: .5rem;
   color: var(--text-muted);
   font-size: .95rem;
   line-height: 1.75;
