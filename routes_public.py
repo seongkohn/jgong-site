@@ -31,7 +31,7 @@ def works():
     for row in rows:
         w = dict(row)
         w["videos"] = db.execute(
-            "SELECT video_url FROM work_video WHERE work_id = ? ORDER BY sort_order",
+            "SELECT title, video_url FROM work_video WHERE work_id = ? ORDER BY sort_order",
             (row["id"],),
         ).fetchall()
         works.append(w)

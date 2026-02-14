@@ -1,5 +1,7 @@
 import os
+import re
 import uuid
+import bleach
 from flask import (
     Blueprint, render_template, request, redirect, url_for, flash, current_app,
 )
@@ -44,6 +46,36 @@ def _delete_image(filename):
         path = os.path.join(current_app.config["UPLOAD_FOLDER"], filename)
         if os.path.exists(path):
             os.remove(path)
+
+
+def _to_embed_url(url):
+    """Convert YouTube watch/share URLs to embed URLs."""
+    if not url:
+        return url
+    # youtube.com/watch?v=ID
+    m = re.match(r'https?://(?:www\.)?youtube\.com/watch\?v=([A-Za-z0-9_-]+)', url)
+    if m:
+        return f'https://www.youtube.com/embed/{m.group(1)}'
+    # youtu.be/ID
+    m = re.match(r'https?://youtu\.be/([A-Za-z0-9_-]+)', url)
+    if m:
+        return f'https://www.youtube.com/embed/{m.group(1)}'
+    return url
+
+
+ALLOWED_TAGS = [
+    "p", "br", "strong", "em", "u", "s", "a",
+    "h1", "h2", "h3", "blockquote", "pre", "code",
+    "ul", "ol", "li", "sub", "sup", "span",
+]
+ALLOWED_ATTRS = {"a": ["href", "target", "rel"], "span": ["class"]}
+
+
+def _sanitize_html(html):
+    """Sanitize HTML from Quill editor."""
+    if not html:
+        return html
+    return bleach.clean(html, tags=ALLOWED_TAGS, attributes=ALLOWED_ATTRS, strip=True)
 
 
 # ── Auth ────────────────────────────────────────────────────────────────
@@ -144,6 +176,7 @@ def work_new():
         img = _save_image(request.files.get("image"))
         db = get_db()
         max_order = db.execute("SELECT COALESCE(MAX(sort_order),0) FROM work").fetchone()[0]
+        description = _sanitize_html(request.form.get("description") or None)
         db.execute(
             "INSERT INTO work (title, year, duration, description, performers, image_filename, sort_order) "
             "VALUES (?, ?, ?, ?, ?, ?, ?)",
@@ -151,7 +184,7 @@ def work_new():
                 request.form["title"],
                 request.form.get("year") or None,
                 request.form.get("duration") or None,
-                request.form.get("description") or None,
+                description,
                 request.form.get("performers") or None,
                 img,
                 max_order + 1,
@@ -159,12 +192,14 @@ def work_new():
         )
         work_id = db.execute("SELECT last_insert_rowid()").fetchone()[0]
         video_urls = request.form.getlist("video_urls[]")
+        video_titles = request.form.getlist("video_titles[]")
         for i, url in enumerate(video_urls):
-            url = url.strip()
+            url = _to_embed_url(url.strip())
             if url:
+                vtitle = video_titles[i].strip() if i < len(video_titles) else ""
                 db.execute(
-                    "INSERT INTO work_video (work_id, video_url, sort_order) VALUES (?, ?, ?)",
-                    (work_id, url, i),
+                    "INSERT INTO work_video (work_id, title, video_url, sort_order) VALUES (?, ?, ?, ?)",
+                    (work_id, vtitle or None, url, i),
                 )
         db.commit()
         flash("Work added.", "success")
@@ -191,6 +226,7 @@ def work_edit(work_id):
             _delete_image(img)
             img = None
 
+        description = _sanitize_html(request.form.get("description") or None)
         db.execute(
             "UPDATE work SET title=?, year=?, duration=?, description=?, performers=?, image_filename=? "
             "WHERE id=?",
@@ -198,7 +234,7 @@ def work_edit(work_id):
                 request.form["title"],
                 request.form.get("year") or None,
                 request.form.get("duration") or None,
-                request.form.get("description") or None,
+                description,
                 request.form.get("performers") or None,
                 img,
                 work_id,
@@ -206,12 +242,14 @@ def work_edit(work_id):
         )
         db.execute("DELETE FROM work_video WHERE work_id = ?", (work_id,))
         video_urls = request.form.getlist("video_urls[]")
+        video_titles = request.form.getlist("video_titles[]")
         for i, url in enumerate(video_urls):
-            url = url.strip()
+            url = _to_embed_url(url.strip())
             if url:
+                vtitle = video_titles[i].strip() if i < len(video_titles) else ""
                 db.execute(
-                    "INSERT INTO work_video (work_id, video_url, sort_order) VALUES (?, ?, ?)",
-                    (work_id, url, i),
+                    "INSERT INTO work_video (work_id, title, video_url, sort_order) VALUES (?, ?, ?, ?)",
+                    (work_id, vtitle or None, url, i),
                 )
         db.commit()
         flash("Work updated.", "success")

@@ -18,8 +18,9 @@
         <h2>{{ w.title }}{% if w.year %} <span class="work-year">({{ w.year }})</span>{% endif %}</h2>
         {% if w.duration %}<p class="work-meta">Duration: {{ w.duration }}</p>{% endif %}
         {% if w.performers %}<p class="work-meta">Performers: {{ w.performers }}</p>{% endif %}
-        {% if w.description %}<p class="work-desc">{{ w.description }}</p>{% endif %}
+        {% if w.description %}<div class="work-desc">{{ w.description|safe }}</div>{% endif %}
         {% for v in w.videos %}
+        {% if v.title %}<h3 class="work-video-title">{{ v.title }}</h3>{% endif %}
         <div class="work-video">
           <iframe src="{{ v.video_url }}" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>

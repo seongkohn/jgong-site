@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS setting (
 CREATE TABLE IF NOT EXISTS work_video (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     work_id INTEGER NOT NULL,
+    title TEXT,
     video_url TEXT NOT NULL,
     sort_order INTEGER DEFAULT 0,
     FOREIGN KEY (work_id) REFERENCES work(id) ON DELETE CASCADE
@@ -98,6 +99,11 @@ def _migrate(db):
                     "INSERT INTO work_video (work_id, video_url, sort_order) VALUES (?, ?, 0)",
                     (row["id"], row["video_url"]),
                 )
+
+    # Add title column to work_video if missing
+    wv_cols = [r[1] for r in db.execute("PRAGMA table_info(work_video)").fetchall()]
+    if "title" not in wv_cols:
+        db.execute("ALTER TABLE work_video ADD COLUMN title TEXT")
 
     db.commit()
 

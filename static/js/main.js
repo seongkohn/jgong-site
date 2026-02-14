@@ -16,7 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
       var row = document.createElement("div");
       row.className = "video-url-row";
       row.innerHTML =
-        '<input type="url" name="video_urls[]" placeholder="https://www.youtube.com/embed/...">' +
+        '<input type="text" name="video_titles[]" placeholder="Video title (optional)">' +
+        '<input type="url" name="video_urls[]" placeholder="YouTube or embed URL">' +
         '<button type="button" class="btn btn-secondary btn-remove-video">Remove</button>';
       videoContainer.appendChild(row);
     });

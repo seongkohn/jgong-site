@@ -362,6 +362,17 @@ img { max-width: 100%; height: auto; display: block; }
   line-height: 1.75;
 }
 
+.work-video-title {
+  margin-top: 1.25rem;
+  margin-bottom: .25rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.work-video-title + .work-video {
+  margin-top: .5rem;
+}
+
 .work-video {
   margin-top: 1.25rem;
   position: relative;
@@ -570,6 +581,21 @@ img { max-width: 100%; height: auto; display: block; }
 }
 
 .form-row .form-group { flex: 1; }
+
+.video-url-row {
+  display: flex;
+  gap: .5rem;
+  margin-bottom: .5rem;
+  align-items: center;
+}
+.video-url-row input[name="video_titles[]"] { flex: 1; }
+.video-url-row input[name="video_urls[]"] { flex: 2; }
+.video-url-row .btn-remove-video { flex-shrink: 0; }
+
+#quill-editor {
+  min-height: 150px;
+  background: var(--surface);
+}
 
 .form-actions { display: flex; gap: .75rem; margin-top: 2rem; }
 

@@ -2,9 +2,10 @@
 {% block title %}{{ "Edit" if work else "New" }} Work — Admin{% endblock %}
 
 {% block content %}
+<link href="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.snow.css" rel="stylesheet">
 <section class="section section-narrow">
   <h1 class="page-title">{{ "Edit" if work else "New" }} Work</h1>
-  <form method="POST" enctype="multipart/form-data" class="form">
+  <form method="POST" enctype="multipart/form-data" class="form" id="work-form">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
     <div class="form-group">
@@ -26,15 +27,17 @@
       <input type="text" id="performers" name="performers" value="{{ work.performers if work and work.performers else '' }}">
     </div>
     <div class="form-group">
-      <label for="description">Description</label>
-      <textarea id="description" name="description" rows="4">{{ work.description if work and work.description else '' }}</textarea>
+      <label>Description</label>
+      <div id="quill-editor">{%- if work and work.description -%}{{ work.description|safe }}{%- endif -%}</div>
+      <input type="hidden" name="description" id="description-hidden">
     </div>
     <div class="form-group">
-      <label>Video Embed URLs</label>
+      <label>Videos</label>
       <div id="video-urls-container">
         {% for v in videos %}
         <div class="video-url-row">
-          <input type="url" name="video_urls[]" value="{{ v.video_url }}" placeholder="https://www.youtube.com/embed/...">
+          <input type="text" name="video_titles[]" value="{{ v.title or '' }}" placeholder="Video title (optional)">
+          <input type="url" name="video_urls[]" value="{{ v.video_url }}" placeholder="YouTube or embed URL">
           <button type="button" class="btn btn-secondary btn-remove-video">Remove</button>
         </div>
         {% endfor %}
@@ -58,4 +61,24 @@
     </div>
   </form>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/quill@2/dist/quill.js"></script>
+<script>
+  var quill = new Quill('#quill-editor', {
+    theme: 'snow',
+    modules: {
+      toolbar: [
+        ['bold', 'italic', 'underline', 'strike'],
+        [{ 'header': [1, 2, 3, false] }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+        ['blockquote', 'link'],
+        ['clean']
+      ]
+    }
+  });
+  document.getElementById('work-form').addEventListener('submit', function () {
+    var html = quill.root.innerHTML;
+    if (html === '<p><br></p>') html = '';
+    document.getElementById('description-hidden').value = html;
+  });
+</script>
 {% endblock %}
