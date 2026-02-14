@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% block title %}Jingmian Gong{% endblock %}</title>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=7">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=8">
 </head>
 <body>
   <nav class="nav">
     <div class="nav-inner">
       <a href="{{ url_for('public_bp.index') }}" class="nav-logo">
-        <img src="{{ url_for('static', filename='images/signature.jpg') }}" alt="Jingmian Gong" height="40">
+        <img src="{{ url_for('static', filename='images/logo.svg') }}" alt="Jingmian Gong" height="40">
       </a>
       <button class="nav-toggle" aria-label="Menu">&#9776;</button>
       <ul class="nav-links">
