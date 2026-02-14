@@ -368,15 +368,13 @@ img { max-width: 100%; height: auto; display: block; }
   color: var(--text-muted);
   font-size: .95rem;
   line-height: 1.75;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
+  max-height: 5.25em;
   overflow: hidden;
+  transition: max-height .3s ease;
 }
 
 .work-desc-toggle:checked ~ .work-desc {
-  -webkit-line-clamp: unset;
-  overflow: visible;
+  max-height: 200em;
 }
 
 .work-desc-more {
