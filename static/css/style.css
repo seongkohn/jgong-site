@@ -371,10 +371,14 @@ img { max-width: 100%; height: auto; display: block; }
   max-height: 5.25em;
   overflow: hidden;
   transition: max-height .3s ease;
+  -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+  mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
 }
 
 .work-desc-toggle:checked ~ .work-desc {
   max-height: 200em;
+  -webkit-mask-image: none;
+  mask-image: none;
 }
 
 .work-desc-more {
