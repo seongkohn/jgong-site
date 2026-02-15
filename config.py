@@ -20,7 +20,7 @@ class Config:
     SECRET_KEY = os.environ.get("SECRET_KEY") or _stable_secret()
     DATABASE = os.path.join(BASE_DIR, "site.db")
     UPLOAD_FOLDER = os.path.join(BASE_DIR, "static", "images", "uploads")
-    MAX_CONTENT_LENGTH = 4 * 1024 * 1024  # 4 MB max upload
+    MAX_CONTENT_LENGTH = 16 * 1024 * 1024  # 16 MB max upload
 
     # Cloudflare Turnstile
     TURNSTILE_SITE_KEY = os.environ.get("TURNSTILE_SITE_KEY", "")
