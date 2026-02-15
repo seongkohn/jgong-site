@@ -244,7 +244,7 @@ img { max-width: 100%; height: auto; display: block; }
 .gallery-track {
   display: flex;
   gap: .75rem;
-  animation: gallery-scroll 100s linear infinite;
+  animation: gallery-scroll 95s linear infinite;
   width: max-content;
 }
 
